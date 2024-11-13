@@ -1,11 +1,9 @@
 {
   "name": "whatsappapi",
   "module": "index.ts",
-  "type": "module",
   "devDependencies": {
     "@eslint/js": "^9.14.0",
     "@types/bun": "latest",
-    "@types/express": "^5.0.0",
     "eslint": "^9.14.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
@@ -16,8 +14,5 @@
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
-  "dependencies": {
-    "axios": "^1.7.7",
-    "express": "^4.21.1"
-  }
+  "type": "module"
 }
