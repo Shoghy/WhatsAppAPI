@@ -1,6 +1,7 @@
 import { catch_unwind, panic } from "rusting-js";
 import { SafeFetch } from "./safeFetch";
 import type {
+  SendTextProps,
   SetUpProps,
   TextMessageBody,
   TextMessageResponse,
@@ -22,15 +23,14 @@ class WhatsAppApi {
   }
 
   /**
-   * @param phoneNumber Número de celular de la persona a la que se le quiere enviar el mensaje
-   * @param message Mensaje de texto
-   * @param messageId Añadir si se quiere que el mensaje sea una respuesta de otro
+   * @link https://developers.facebook.com/docs/whatsapp/cloud-api/messages/text-messages
    */
-  async SendText(
-    phoneNumber: string,
-    message: string,
-    messageId?: string,
-  ): Promise<Result<TextMessageResponse, WSRequestError>> {
+  async SendTextMessage({
+    phoneNumber,
+    message,
+    messageId,
+    previewUrl,
+  }: SendTextProps): Promise<Result<TextMessageResponse, WSRequestError>> {
     const { headers, baseUrl } = this;
 
     const body: TextMessageBody = {
@@ -41,6 +41,9 @@ class WhatsAppApi {
 
     if (messageId) {
       body.context = { message_id: messageId };
+    }
+    if (previewUrl) {
+      body.text.preview_url = true;
     }
 
     const result = await SafeFetch(`${baseUrl}/messages`, {

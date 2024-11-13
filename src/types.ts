@@ -8,7 +8,10 @@ export interface SetUpProps {
 export interface TextMessageBody {
   messaging_product: "whatsapp";
   to: string;
-  text: { body: string };
+  text: {
+    body: string;
+    preview_url?: true;
+  };
   context?: {
     message_id: string;
   };
@@ -44,4 +47,15 @@ export interface WSErrorJSON {
 
 export interface WSErrorResponse {
   error: WSErrorJSON;
+}
+
+export interface SendTextProps {
+  /**Número de celular de la persona a la que se le quiere enviar el mensaje */
+  phoneNumber: string;
+  /**Mensaje de texto, puede tener un máximo de 4096 carácteres */
+  message: string;
+  /**Añadir si se quiere que el mensaje sea una respuesta de otro */
+  messageId?: string;
+  /**Asignar a true si se quiere mostrar una previsualización de link en el mensaje */
+  previewUrl?: true;
 }
