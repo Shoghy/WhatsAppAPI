@@ -10,4 +10,9 @@ export default [
   eslintPluginPrettierRecommended,
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
+  {
+    rules: {
+      quotes: ["warn", "double", { avoidEscape: true }],
+    },
+  },
 ];
