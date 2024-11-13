@@ -1,4 +1,13 @@
-import type { SetUpProps, TextMessageBody } from "./types";
+import { catch_unwind, panic } from "rusting-js";
+import { SafeFetch } from "./safeFetch";
+import type {
+  SetUpProps,
+  TextMessageBody,
+  TextMessageResponse,
+  WSErrorResponse,
+} from "./types";
+import { Err, Ok, Result } from "rusting-js/enums";
+import { WSRequestError } from "./error";
 
 class WhatsAppApi {
   private headers: HeadersInit;
@@ -17,7 +26,11 @@ class WhatsAppApi {
    * @param message Mensaje de texto
    * @param messageId Añadir si se quiere que el mensaje sea una respuesta de otro
    */
-  SendText(phoneNumber: string, message: string, messageId?: string) {
+  async SendText(
+    phoneNumber: string,
+    message: string,
+    messageId?: string,
+  ): Promise<Result<TextMessageResponse, WSRequestError>> {
     const { headers, baseUrl } = this;
 
     const body: TextMessageBody = {
@@ -30,11 +43,28 @@ class WhatsAppApi {
       body.context = { message_id: messageId };
     }
 
-    fetch(`${baseUrl}/messages`, {
+    const result = await SafeFetch(`${baseUrl}/messages`, {
       method: "POST",
       headers,
       body: JSON.stringify(body),
     });
+    if (result.is_err()) {
+      return Err(WSRequestError.FetchError(result.unwrap_err()));
+    }
+
+    const response = result.unwrap();
+    const jsonResult = await catch_unwind(() => response.json());
+    if (jsonResult.is_err()) {
+      return Err(WSRequestError.ParseError(jsonResult.unwrap_err()));
+    }
+
+    const responseJson: TextMessageResponse | WSErrorResponse =
+      jsonResult.unwrap();
+    if ("error" in responseJson) {
+      return Err(WSRequestError.ResponseError(responseJson.error));
+    }
+
+    return Ok(responseJson);
   }
 }
 
@@ -44,7 +74,7 @@ const app = new Map<string, WhatsAppApi>();
 export function WhatsApp() {
   const api = app.get(key);
   if (api === undefined) {
-    throw new Error("The API hasn't been initialized");
+    panic("The API hasn't been initialized");
   }
   return api;
 }
