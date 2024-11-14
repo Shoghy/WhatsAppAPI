@@ -1,4 +1,8 @@
-import type { BaseButtonParam, BaseParam } from "./params";
+import {
+  ButtonParamType,
+  type BaseButtonParam,
+  type BaseParam,
+} from "./params";
 
 export enum ComponentType {
   Body = "body",
@@ -81,11 +85,6 @@ export enum ButtonComponentType {
   Catalog = "catalog",
 }
 
-export enum ButtonParameterType {
-  Payload = "payload",
-  Text = "text",
-}
-
 export abstract class BaseButtonComponent extends Component {
   /**
    * @param index Position index of the button. You can have up to 10 buttons using index values of 0 to 9.
@@ -121,7 +120,7 @@ export class QuickReplyButtonComponent extends BaseButtonComponent {
       ...prev,
       parameters: [
         {
-          type: ButtonParameterType.Payload,
+          type: ButtonParamType.Payload,
           payload: this.payload,
         },
       ],
@@ -144,7 +143,7 @@ export class UrlButtonComponent extends BaseButtonComponent {
       ...prev,
       parameters: [
         {
-          type: ButtonParameterType.Text,
+          type: ButtonParamType.Text,
           text: this.text,
         },
       ],
