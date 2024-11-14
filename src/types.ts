@@ -1,4 +1,9 @@
 import type { WSResponseErrorCode } from "./error";
+import type {
+  BaseButtonComponent,
+  BodyComponent,
+  HeaderComponent,
+} from "./templateMessages/components";
 
 export interface SetUpProps {
   businessPhoneNumberId: string;
@@ -24,7 +29,7 @@ export interface ContactInfo {
 
 export interface MessageInfo {
   id: string;
-  message_status: string;
+  message_status?: string;
 }
 
 export interface TextMessageResponse {
@@ -49,7 +54,7 @@ export interface WSErrorResponse {
   error: WSErrorJSON;
 }
 
-export interface SendTextProps {
+export interface SendTextMessageProps {
   /**Número de celular de la persona a la que se le quiere enviar el mensaje */
   phoneNumber: string;
   /**Mensaje de texto, puede tener un máximo de 4096 carácteres */
@@ -58,4 +63,30 @@ export interface SendTextProps {
   messageId?: string;
   /**Asignar a true si se quiere mostrar una previsualización de link en el mensaje */
   previewUrl?: true;
+}
+
+export interface SendTemplateMessageProps {
+  name: string;
+  /**
+   * [Supported language codes](https://developers.facebook.com/docs/whatsapp/api/messages/message-templates#supported-languages)
+   */
+  languageCode: string;
+  /**Número de celular de la persona a la que se le quiere enviar el mensaje */
+  phoneNumber: string;
+  headerComponent?: HeaderComponent;
+  bodyComponent?: BodyComponent;
+  buttonComponents?: BaseButtonComponent[];
+}
+
+export interface TemplateMessageBody {
+  type: "template";
+  messaging_product: "whatsapp";
+  to: string;
+  template: {
+    name: string;
+    language: {
+      code: string;
+    };
+    components?: object[];
+  };
 }

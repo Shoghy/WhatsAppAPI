@@ -1,8 +1,10 @@
 import { catch_unwind, panic } from "rusting-js";
 import { SafeFetch } from "./safeFetch";
 import type {
-  SendTextProps,
+  SendTemplateMessageProps,
+  SendTextMessageProps,
   SetUpProps,
+  TemplateMessageBody,
   TextMessageBody,
   TextMessageResponse,
   WSErrorResponse,
@@ -30,7 +32,7 @@ class WhatsAppApi {
     message,
     messageId,
     previewUrl,
-  }: SendTextProps): Promise<Result<TextMessageResponse, WSRequestError>> {
+  }: SendTextMessageProps) {
     const { headers, baseUrl } = this;
 
     const body: TextMessageBody = {
@@ -51,6 +53,56 @@ class WhatsAppApi {
       headers,
       body: JSON.stringify(body),
     });
+
+    return await this.HandleResponse(result);
+  }
+
+  /**
+   * @link https://developers.facebook.com/docs/whatsapp/cloud-api/guides/send-message-templates
+   */
+  async SendTemplateMessage({
+    languageCode,
+    name,
+    phoneNumber,
+    headerComponent,
+    bodyComponent,
+    buttonComponents = [],
+  }: SendTemplateMessageProps) {
+    const { headers, baseUrl } = this;
+
+    const body: TemplateMessageBody = {
+      messaging_product: "whatsapp",
+      to: phoneNumber,
+      type: "template",
+      template: {
+        name,
+        language: { code: languageCode },
+      },
+    };
+    const components: object[] = [];
+
+    if (headerComponent) {
+      components.push(headerComponent.ToJSON());
+    }
+    if (bodyComponent) {
+      components.push(bodyComponent.ToJSON());
+    }
+    for (const button of buttonComponents) {
+      components.push(button.ToJSON());
+    }
+
+    const result = await SafeFetch(`${baseUrl}/messages`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(body),
+    });
+
+    return await this.HandleResponse(result);
+  }
+
+  protected async HandleResponse(
+    result: Result<Response, Error>,
+  ): Promise<Result<TextMessageResponse, WSRequestError>> {
     if (result.is_err()) {
       return Err(WSRequestError.FetchError(result.unwrap_err()));
     }
