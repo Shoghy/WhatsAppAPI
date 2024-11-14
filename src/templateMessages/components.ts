@@ -18,14 +18,18 @@ abstract class Component {
   }
 }
 
-export class BodyComponent extends Component {
-  constructor(readonly parameters: Array<BaseParam>) {
-    super(ComponentType.Body);
+type ParamBaseComponentType = ComponentType.Body | ComponentType.Header;
+abstract class ParamBaseComponent extends Component {
+  constructor(
+    type: ParamBaseComponentType,
+    public parameters: Array<BaseParam>,
+  ) {
+    super(type);
   }
 
   override ToJSON(): object {
     const obj: Dict<unknown> = {
-      type: ComponentType.Body,
+      type: this.type,
     };
 
     const { parameters } = this;
@@ -42,27 +46,15 @@ export class BodyComponent extends Component {
   }
 }
 
-export class HeaderComponent extends Component {
-  constructor(readonly parameters: Array<BaseParam>) {
-    super(ComponentType.Header);
+export class BodyComponent extends ParamBaseComponent {
+  constructor(parameters: Array<BaseParam>) {
+    super(ComponentType.Body, parameters);
   }
+}
 
-  override ToJSON(): object {
-    const obj: Dict<unknown> = {
-      type: ComponentType.Header,
-    };
-
-    const { parameters } = this;
-    const paramsJSON: object[] = [];
-    for (const p of parameters) {
-      paramsJSON.push(p.ToJSON());
-    }
-
-    if (paramsJSON.length > 0) {
-      obj.parameters = paramsJSON;
-    }
-
-    return obj;
+export class HeaderComponent extends ParamBaseComponent {
+  constructor(parameters: Array<BaseParam>) {
+    super(ComponentType.Header, parameters);
   }
 }
 
