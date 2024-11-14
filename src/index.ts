@@ -90,6 +90,9 @@ class WhatsAppApi {
     for (const button of buttonComponents) {
       components.push(button.ToJSON());
     }
+    if (components.length > 0) {
+      body.template.components = components;
+    }
 
     const result = await SafeFetch(`${baseUrl}/messages`, {
       method: "POST",
