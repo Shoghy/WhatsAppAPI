@@ -1,4 +1,11 @@
 export { SetUpWhatsAppAPI, WhatsApp } from "./src/index";
+export type {
+  ContactInfo,
+  MessageInfo,
+  WSErrorJSON,
+  WSErrorResponse,
+  TextMessageResponse,
+} from "./src/types";
 export { WSRequestError, WSResponseErrorCode } from "./src/error";
 export {
   BodyComponent,

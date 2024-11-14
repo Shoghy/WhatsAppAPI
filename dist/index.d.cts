@@ -478,6 +478,9 @@ interface WSErrorJSON {
     error_subcode: number;
     fbtrace_id: string;
 }
+interface WSErrorResponse {
+    error: WSErrorJSON;
+}
 interface SendTextMessageProps {
     /**Número de celular de la persona a la que se le quiere enviar el mensaje */
     phoneNumber: string;
@@ -518,4 +521,4 @@ declare class WhatsAppApi {
 declare function WhatsApp(): WhatsAppApi;
 declare function SetUpWhatsAppAPI({ graphApiToken, businessPhoneNumberId, }: SetUpProps): WhatsAppApi;
 
-export { BodyComponent, ButtonComponentType, ButtonParamType, ButtonPayloadParam, ButtonTextParam, CatalogButtonComponent, ComponentType, CurrencyParam, DateTimeParam, DocumentParam, HeaderComponent, ImageParam, ParamType, QuickReplyButtonComponent, SetUpWhatsAppAPI, TextParam, UrlButtonComponent, VideoParam, WSRequestError, WSResponseErrorCode, WhatsApp };
+export { BodyComponent, ButtonComponentType, ButtonParamType, ButtonPayloadParam, ButtonTextParam, CatalogButtonComponent, ComponentType, type ContactInfo, CurrencyParam, DateTimeParam, DocumentParam, HeaderComponent, ImageParam, type MessageInfo, ParamType, QuickReplyButtonComponent, SetUpWhatsAppAPI, type TextMessageResponse, TextParam, UrlButtonComponent, VideoParam, type WSErrorJSON, type WSErrorResponse, WSRequestError, WSResponseErrorCode, WhatsApp };
