@@ -72,24 +72,59 @@ export class DateTimeParam extends BaseParam {
   }
 }
 
+type MediaParamType = ParamType.Image | ParamType.Video | ParamType.Document;
+abstract class MediaParam extends BaseParam {
+  caption?: string;
+  link!: string;
+  id!: string;
+
+  protected constructor(type: MediaParamType, caption?: string) {
+    super(type);
+
+    if (caption) {
+      this.caption = caption;
+    }
+  }
+
+  override ToJSON(): object {
+    const fieldName = this.type;
+    const obj: Dict<Dict<unknown>> = {};
+
+    if (this.id !== undefined) {
+      obj[fieldName] = {
+        id: this.id,
+      };
+    } else if (this.link !== undefined) {
+      obj[fieldName] = {
+        link: this.link,
+      };
+    } else {
+      panic("Neither of `link` or `id` are defined");
+    }
+
+    if (this.caption) {
+      obj[fieldName].caption = this.caption;
+    }
+
+    return {
+      ...obj,
+      type: this.type,
+    };
+  }
+}
+
 export interface DocumentParamProps {
   caption?: string;
   /**The extension of the filename will specify what format the document is displayed as in WhatsApp. */
   filename?: string;
 }
 
-export class DocumentParam extends BaseParam implements DocumentParamProps {
-  link!: string;
-  id!: string;
-  caption?: string;
+export class DocumentParam extends MediaParam {
   filename?: string;
 
   private constructor({ caption, filename }: DocumentParamProps) {
-    super(ParamType.Document);
+    super(ParamType.Document, caption);
 
-    if (caption) {
-      this.caption = caption;
-    }
     if (filename) {
       this.filename = filename;
     }
@@ -110,76 +145,29 @@ export class DocumentParam extends BaseParam implements DocumentParamProps {
   }
 
   override ToJSON(): object {
-    const document: Dict<string> = {};
+    const prev = super.ToJSON() as Dict<Dict<unknown>>;
 
-    if (this.id !== undefined) {
-      document.id = this.id;
-    } else if (this.link !== undefined) {
-      document.link = this.link;
-    } else {
-      panic("Neither of `link` or `id` are defined");
+    if (this.filename) {
+      prev.document.filename = this.filename;
     }
 
-    const { caption, filename } = this;
-    if (caption) {
-      document.caption = caption;
-    }
-    if (filename) {
-      document.filename = filename;
-    }
-
-    return {
-      type: this.type,
-      document,
-    };
+    return prev;
   }
 }
 
-export class ImageParam extends BaseParam {
-  caption?: string;
-  link!: string;
-  id!: string;
-
-  private constructor(caption?: string) {
-    super(ParamType.Image);
-    if (caption) {
-      this.caption = caption;
-    }
-  }
-
+export class ImageParam extends MediaParam {
   static FromId(id: string, caption?: string) {
-    const obj = new this(caption);
+    const obj = new this(ParamType.Image, caption);
     obj.id = id;
 
     return obj;
   }
 
   static FromLink(link: string, caption?: string) {
-    const obj = new this(caption);
+    const obj = new this(ParamType.Image, caption);
     obj.link = link;
 
     return obj;
-  }
-
-  override ToJSON(): object {
-    const image: Dict<string> = {};
-
-    if (this.id !== undefined) {
-      image.id = this.id;
-    } else if (this.link !== undefined) {
-      image.link = this.link;
-    } else {
-      panic("Neither of `link` or `id` are defined");
-    }
-
-    if (this.caption) {
-      image.caption = this.caption;
-    }
-
-    return {
-      type: this.type,
-      image,
-    };
   }
 }
 
@@ -196,51 +184,19 @@ export class TextParam extends BaseParam {
   }
 }
 
-export class VideoParam extends BaseParam {
-  caption?: string;
-  link!: string;
-  id!: string;
-
-  private constructor(caption?: string) {
-    super(ParamType.Video);
-    if (caption) {
-      this.caption = caption;
-    }
-  }
-
+export class VideoParam extends MediaParam {
   static FromId(id: string, caption?: string) {
-    const obj = new this(caption);
+    const obj = new this(ParamType.Video, caption);
     obj.id = id;
 
     return obj;
   }
 
   static FromLink(link: string, caption?: string) {
-    const obj = new this(caption);
+    const obj = new this(ParamType.Video, caption);
     obj.link = link;
 
     return obj;
-  }
-
-  override ToJSON(): object {
-    const video: Dict<string> = {};
-
-    if (this.id !== undefined) {
-      video.id = this.id;
-    } else if (this.link !== undefined) {
-      video.link = this.link;
-    } else {
-      panic("Neither of `link` or `id` are defined");
-    }
-
-    if (this.caption) {
-      video.caption = this.caption;
-    }
-
-    return {
-      type: this.type,
-      video,
-    };
   }
 }
 
