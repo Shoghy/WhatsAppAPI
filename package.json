@@ -1,6 +1,7 @@
 {
   "name": "whatsappapi",
   "module": "index.ts",
+  "main": "index.ts",
   "devDependencies": {
     "@eslint/js": "^9.14.0",
     "@types/bun": "latest",
