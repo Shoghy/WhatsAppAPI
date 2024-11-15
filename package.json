@@ -2,7 +2,7 @@
   "name": "whatsappapi",
   "module": "dist/index.cjs",
   "types": "dist/index.d.cts",
-  "main": "index.ts",
+  "main": "dist/index.cjs",
   "version": "0.0.1",
   "devDependencies": {
     "@eslint/js": "^9.14.0",
