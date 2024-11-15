@@ -12,7 +12,7 @@ import type {
 import { Err, Ok, Result } from "rusting-js/enums";
 import { WSRequestError } from "./error";
 
-class WhatsAppApi {
+export class WhatsAppApi {
   private headers: HeadersInit;
   private baseUrl: string;
 

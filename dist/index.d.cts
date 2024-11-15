@@ -454,6 +454,17 @@ interface SetUpProps {
     businessPhoneNumberId: string;
     graphApiToken: string;
 }
+interface TextMessageBody {
+    messaging_product: "whatsapp";
+    to: string;
+    text: {
+        body: string;
+        preview_url?: true;
+    };
+    context?: {
+        message_id: string;
+    };
+}
 interface ContactInfo {
     input: string;
     wa_id: string;
@@ -503,6 +514,18 @@ interface SendTemplateMessageProps {
     bodyComponent?: BodyComponent;
     buttonComponents?: BaseButtonComponent[];
 }
+interface TemplateMessageBody {
+    type: "template";
+    messaging_product: "whatsapp";
+    to: string;
+    template: {
+        name: string;
+        language: {
+            code: string;
+        };
+        components?: object[];
+    };
+}
 
 declare class WhatsAppApi {
     private headers;
@@ -521,4 +544,4 @@ declare class WhatsAppApi {
 declare function WhatsApp(): WhatsAppApi;
 declare function SetUpWhatsAppAPI({ graphApiToken, businessPhoneNumberId, }: SetUpProps): WhatsAppApi;
 
-export { BodyComponent, ButtonComponentType, ButtonParamType, ButtonPayloadParam, ButtonTextParam, CatalogButtonComponent, ComponentType, type ContactInfo, CurrencyParam, DateTimeParam, DocumentParam, HeaderComponent, ImageParam, type MessageInfo, ParamType, QuickReplyButtonComponent, SetUpWhatsAppAPI, type TextMessageResponse, TextParam, UrlButtonComponent, VideoParam, type WSErrorJSON, type WSErrorResponse, WSRequestError, WSResponseErrorCode, WhatsApp };
+export { BaseButtonComponent, BaseButtonParam, BaseParam, BodyComponent, ButtonComponentType, ButtonParamType, ButtonPayloadParam, ButtonTextParam, CatalogButtonComponent, ComponentType, type ContactInfo, CurrencyParam, type CurrencyParamProps, DateTimeParam, DocumentParam, type DocumentParamProps, HeaderComponent, ImageParam, type MessageInfo, ParamType, QuickReplyButtonComponent, type SendTemplateMessageProps, type SendTextMessageProps, type SetUpProps, SetUpWhatsAppAPI, type TemplateMessageBody, type TextMessageBody, type TextMessageResponse, TextParam, UrlButtonComponent, VideoParam, type WSErrorJSON, type WSErrorResponse, WSRequestError, WSResponseErrorCode, WhatsApp, WhatsAppApi };
