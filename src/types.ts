@@ -46,7 +46,7 @@ export interface WSErrorJSON {
     messaging_product: "whatsapp";
     details: string;
   };
-  error_subcode: number;
+  error_subcode?: number;
   fbtrace_id: string;
 }
 

@@ -163,7 +163,7 @@ export enum WSResponseErrorCode {
 export class WSRequestError extends Enum<{
   FetchError: Error;
   ParseError: Error;
-  ResponseError: WSErrorJSON;
+  ResponseError: WSError;
 }>() {
   static FetchError(error: Error): WSRequestError {
     return this.create("FetchError", error);
@@ -173,7 +173,35 @@ export class WSRequestError extends Enum<{
     return this.create("ParseError", error);
   }
 
-  static ResponseError(error: WSErrorJSON): WSRequestError {
+  static ResponseError(error: WSError): WSRequestError {
     return this.create("ResponseError", error);
+  }
+}
+
+export class WSError extends Error {
+  protected constructor(
+    readonly json: object,
+    readonly message: string,
+    readonly type: string,
+    readonly code: WSResponseErrorCode,
+    readonly fbtraceId: string,
+    readonly details: string,
+    readonly errorSubCode?: number,
+  ) {
+    super(message, {
+      cause: "WhatsApp send a error response",
+    });
+  }
+
+  static FromJSON(json: WSErrorJSON) {
+    return new this(
+      json,
+      json.message,
+      json.type,
+      json.code,
+      json.fbtrace_id,
+      json.error_data.details,
+      json.error_subcode,
+    );
   }
 }

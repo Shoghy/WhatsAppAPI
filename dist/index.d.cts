@@ -159,132 +159,132 @@ declare enum WSResponseErrorCode {
     GenericUserError = 135000
 }
 declare const WSRequestError_base: {
-    new (type: "FetchError" | "ParseError" | "ResponseError", value: Error | WSErrorJSON): {
+    new (type: "FetchError" | "ParseError" | "ResponseError", value: Error | WSError): {
         update(sym: symbol, type: "FetchError" | "ParseError" | "ResponseError", value: unknown): void;
         get(sym: symbol): any;
         change_to<T extends "FetchError" | "ParseError" | "ResponseError">(type: {
             FetchError: Error;
             ParseError: Error;
-            ResponseError: WSErrorJSON;
+            ResponseError: WSError;
         }[T] extends void ? T : never): void;
         change_to<T extends "FetchError" | "ParseError" | "ResponseError">(type: {
             FetchError: Error;
             ParseError: Error;
-            ResponseError: WSErrorJSON;
+            ResponseError: WSError;
         }[T] extends void ? never : T, value: {
             FetchError: Error;
             ParseError: Error;
-            ResponseError: WSErrorJSON;
+            ResponseError: WSError;
         }[T]): void;
         is(type: "FetchError" | "ParseError" | "ResponseError"): boolean;
         if_is<T extends "FetchError" | "ParseError" | "ResponseError">(type: T, func: {
             FetchError: Error;
             ParseError: Error;
-            ResponseError: WSErrorJSON;
+            ResponseError: WSError;
         }[T] extends void ? () => unknown : (value: {
             FetchError: Error;
             ParseError: Error;
-            ResponseError: WSErrorJSON;
+            ResponseError: WSError;
         }[T]) => unknown): void;
         match<T>(arms: {
             FetchError: (value: Error) => T;
             ParseError: (value: Error) => T;
-            ResponseError: (value: WSErrorJSON) => T;
+            ResponseError: (value: WSError) => T;
         }): T;
         match<T>(arms: {
             FetchError?: ((value: Error) => T) | undefined;
             ParseError?: ((value: Error) => T) | undefined;
-            ResponseError?: ((value: WSErrorJSON) => T) | undefined;
+            ResponseError?: ((value: WSError) => T) | undefined;
         }, def: () => T): T;
         toString(): string;
     };
     create<T extends "FetchError" | "ParseError" | "ResponseError">(type: {
         FetchError: Error;
         ParseError: Error;
-        ResponseError: WSErrorJSON;
+        ResponseError: WSError;
     }[T] extends void ? T : never): {
         update(sym: symbol, type: "FetchError" | "ParseError" | "ResponseError", value: unknown): void;
         get(sym: symbol): any;
         change_to<T_1 extends "FetchError" | "ParseError" | "ResponseError">(type: {
             FetchError: Error;
             ParseError: Error;
-            ResponseError: WSErrorJSON;
+            ResponseError: WSError;
         }[T_1] extends void ? T_1 : never): void;
         change_to<T_1 extends "FetchError" | "ParseError" | "ResponseError">(type: {
             FetchError: Error;
             ParseError: Error;
-            ResponseError: WSErrorJSON;
+            ResponseError: WSError;
         }[T_1] extends void ? never : T_1, value: {
             FetchError: Error;
             ParseError: Error;
-            ResponseError: WSErrorJSON;
+            ResponseError: WSError;
         }[T_1]): void;
         is(type: "FetchError" | "ParseError" | "ResponseError"): boolean;
         if_is<T_1 extends "FetchError" | "ParseError" | "ResponseError">(type: T_1, func: {
             FetchError: Error;
             ParseError: Error;
-            ResponseError: WSErrorJSON;
+            ResponseError: WSError;
         }[T_1] extends void ? () => unknown : (value: {
             FetchError: Error;
             ParseError: Error;
-            ResponseError: WSErrorJSON;
+            ResponseError: WSError;
         }[T_1]) => unknown): void;
         match<T_1>(arms: {
             FetchError: (value: Error) => T_1;
             ParseError: (value: Error) => T_1;
-            ResponseError: (value: WSErrorJSON) => T_1;
+            ResponseError: (value: WSError) => T_1;
         }): T_1;
         match<T_1>(arms: {
             FetchError?: ((value: Error) => T_1) | undefined;
             ParseError?: ((value: Error) => T_1) | undefined;
-            ResponseError?: ((value: WSErrorJSON) => T_1) | undefined;
+            ResponseError?: ((value: WSError) => T_1) | undefined;
         }, def: () => T_1): T_1;
         toString(): string;
     };
     create<T extends "FetchError" | "ParseError" | "ResponseError">(type: {
         FetchError: Error;
         ParseError: Error;
-        ResponseError: WSErrorJSON;
+        ResponseError: WSError;
     }[T] extends void ? never : T, value: {
         FetchError: Error;
         ParseError: Error;
-        ResponseError: WSErrorJSON;
+        ResponseError: WSError;
     }[T]): {
         update(sym: symbol, type: "FetchError" | "ParseError" | "ResponseError", value: unknown): void;
         get(sym: symbol): any;
         change_to<T_1 extends "FetchError" | "ParseError" | "ResponseError">(type: {
             FetchError: Error;
             ParseError: Error;
-            ResponseError: WSErrorJSON;
+            ResponseError: WSError;
         }[T_1] extends void ? T_1 : never): void;
         change_to<T_1 extends "FetchError" | "ParseError" | "ResponseError">(type: {
             FetchError: Error;
             ParseError: Error;
-            ResponseError: WSErrorJSON;
+            ResponseError: WSError;
         }[T_1] extends void ? never : T_1, value: {
             FetchError: Error;
             ParseError: Error;
-            ResponseError: WSErrorJSON;
+            ResponseError: WSError;
         }[T_1]): void;
         is(type: "FetchError" | "ParseError" | "ResponseError"): boolean;
         if_is<T_1 extends "FetchError" | "ParseError" | "ResponseError">(type: T_1, func: {
             FetchError: Error;
             ParseError: Error;
-            ResponseError: WSErrorJSON;
+            ResponseError: WSError;
         }[T_1] extends void ? () => unknown : (value: {
             FetchError: Error;
             ParseError: Error;
-            ResponseError: WSErrorJSON;
+            ResponseError: WSError;
         }[T_1]) => unknown): void;
         match<T_1>(arms: {
             FetchError: (value: Error) => T_1;
             ParseError: (value: Error) => T_1;
-            ResponseError: (value: WSErrorJSON) => T_1;
+            ResponseError: (value: WSError) => T_1;
         }): T_1;
         match<T_1>(arms: {
             FetchError?: ((value: Error) => T_1) | undefined;
             ParseError?: ((value: Error) => T_1) | undefined;
-            ResponseError?: ((value: WSErrorJSON) => T_1) | undefined;
+            ResponseError?: ((value: WSError) => T_1) | undefined;
         }, def: () => T_1): T_1;
         toString(): string;
     };
@@ -292,7 +292,18 @@ declare const WSRequestError_base: {
 declare class WSRequestError extends WSRequestError_base {
     static FetchError(error: Error): WSRequestError;
     static ParseError(error: Error): WSRequestError;
-    static ResponseError(error: WSErrorJSON): WSRequestError;
+    static ResponseError(error: WSError): WSRequestError;
+}
+declare class WSError extends Error {
+    readonly json: object;
+    readonly message: string;
+    readonly type: string;
+    readonly code: WSResponseErrorCode;
+    readonly fbtraceId: string;
+    readonly details: string;
+    readonly errorSubCode?: number | undefined;
+    protected constructor(json: object, message: string, type: string, code: WSResponseErrorCode, fbtraceId: string, details: string, errorSubCode?: number | undefined);
+    static FromJSON(json: WSErrorJSON): WSError;
 }
 
 declare enum ParamType {
@@ -486,7 +497,7 @@ interface WSErrorJSON {
         messaging_product: "whatsapp";
         details: string;
     };
-    error_subcode: number;
+    error_subcode?: number;
     fbtrace_id: string;
 }
 interface WSErrorResponse {

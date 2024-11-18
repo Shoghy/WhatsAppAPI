@@ -10,7 +10,7 @@ import type {
   WSErrorResponse,
 } from "./types";
 import { Err, Ok, Result } from "rusting-js/enums";
-import { WSRequestError } from "./error";
+import { WSRequestError, WSError } from "./error";
 
 export class WhatsAppApi {
   private headers: HeadersInit;
@@ -119,7 +119,9 @@ export class WhatsAppApi {
     const responseJson: TextMessageResponse | WSErrorResponse =
       jsonResult.unwrap();
     if ("error" in responseJson) {
-      return Err(WSRequestError.ResponseError(responseJson.error));
+      return Err(
+        WSRequestError.ResponseError(WSError.FromJSON(responseJson.error)),
+      );
     }
 
     return Ok(responseJson);
