@@ -11,7 +11,7 @@ export type {
   TemplateMessageBody,
   TextMessageBody,
 } from "./src/types";
-export { WSRequestError, WSResponseErrorCode } from "./src/error";
+export { WSRequestError, WSResponseErrorCode, WSError } from "./src/error";
 export {
   BodyComponent,
   ButtonComponentType,
