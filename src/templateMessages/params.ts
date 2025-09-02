@@ -81,7 +81,7 @@ abstract class MediaParam extends BaseParam {
   protected constructor(type: MediaParamType, caption?: string) {
     super(type);
 
-    if (caption) {
+    if (caption !== undefined) {
       this.caption = caption;
     }
   }
@@ -102,7 +102,7 @@ abstract class MediaParam extends BaseParam {
       panic("Neither of `link` or `id` are defined");
     }
 
-    if (this.caption) {
+    if (this.caption !== undefined) {
       obj[fieldName].caption = this.caption;
     }
 
@@ -125,7 +125,7 @@ export class DocumentParam extends MediaParam {
   private constructor({ caption, filename }: DocumentParamProps) {
     super(ParamType.Document, caption);
 
-    if (filename) {
+    if (filename !== undefined) {
       this.filename = filename;
     }
   }
@@ -147,7 +147,7 @@ export class DocumentParam extends MediaParam {
   override ToJSON(): object {
     const prev = super.ToJSON() as Dict<Dict<unknown>>;
 
-    if (this.filename) {
+    if (this.filename !== undefined) {
       prev.document.filename = this.filename;
     }
 

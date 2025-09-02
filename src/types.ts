@@ -62,7 +62,7 @@ export interface SendTextMessageProps {
   /**Añadir si se quiere que el mensaje sea una respuesta de otro */
   messageId?: string;
   /**Asignar a true si se quiere mostrar una previsualización de link en el mensaje */
-  previewUrl?: true;
+  previewUrl?: boolean;
 }
 
 export interface SendTemplateMessageProps {

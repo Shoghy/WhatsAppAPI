@@ -1,4 +1,4 @@
-import { catch_unwind, panic } from "rusting-js";
+import { catch_unwind } from "rusting-js";
 import { SafeFetch } from "./safeFetch";
 import type {
   SendTemplateMessageProps,
@@ -9,10 +9,11 @@ import type {
   TextMessageResponse,
   WSErrorResponse,
 } from "./types";
-import { Err, Ok, Result } from "rusting-js/enums";
+import type { Result } from "rusting-js/enums";
+import { Err, Ok } from "rusting-js/enums";
 import { WSRequestError, WSError } from "./error";
 
-export class WhatsAppApi {
+class WhatsAppApi {
   private headers: HeadersInit;
   private baseUrl: string;
 
@@ -21,7 +22,7 @@ export class WhatsAppApi {
       Authorization: `Bearer ${graphApiToken}`,
       "Content-Type": "application/json",
     };
-    this.baseUrl = `https://graph.facebook.com/v20.0/${businessPhoneNumberId}`;
+    this.baseUrl = `https://graph.facebook.com/v22.0/${businessPhoneNumberId}`;
   }
 
   /**
@@ -31,7 +32,7 @@ export class WhatsAppApi {
     phoneNumber,
     message,
     messageId,
-    previewUrl,
+    previewUrl = false,
   }: SendTextMessageProps) {
     const { headers, baseUrl } = this;
 
@@ -41,7 +42,7 @@ export class WhatsAppApi {
       to: phoneNumber,
     };
 
-    if (messageId) {
+    if (messageId !== undefined) {
       body.context = { message_id: messageId };
     }
     if (previewUrl) {
@@ -81,10 +82,10 @@ export class WhatsAppApi {
     };
     const components: object[] = [];
 
-    if (headerComponent) {
+    if (headerComponent !== undefined) {
       components.push(headerComponent.ToJSON());
     }
-    if (bodyComponent) {
+    if (bodyComponent !== undefined) {
       components.push(bodyComponent.ToJSON());
     }
     for (const button of buttonComponents) {
@@ -128,22 +129,9 @@ export class WhatsAppApi {
   }
 }
 
-const key = "WHATSAPP_APP_KEY";
-const app = new Map<string, WhatsAppApi>();
-
-export function WhatsApp() {
-  const api = app.get(key);
-  if (api === undefined) {
-    panic("The API hasn't been initialized");
-  }
-  return api;
-}
-
 export function SetUpWhatsAppAPI({
   graphApiToken,
   businessPhoneNumberId,
 }: SetUpProps) {
-  const api = new WhatsAppApi(graphApiToken, businessPhoneNumberId);
-  app.set(key, api);
-  return api;
+  return new WhatsAppApi(graphApiToken, businessPhoneNumberId);
 }

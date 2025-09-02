@@ -1,4 +1,4 @@
-export { SetUpWhatsAppAPI, WhatsApp, WhatsAppApi } from "./src/index";
+export { SetUpWhatsAppAPI } from "./src/index";
 export type {
   ContactInfo,
   MessageInfo,

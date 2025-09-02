@@ -1,8 +1,5 @@
-import {
-  ButtonParamType,
-  type BaseButtonParam,
-  type BaseParam,
-} from "./params";
+import { ButtonParamType } from "./params";
+import type { BaseButtonParam, BaseParam } from "./params";
 
 export enum ComponentType {
   Body = "body",

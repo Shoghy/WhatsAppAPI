@@ -1,4 +1,4 @@
-import { SetUpWhatsAppAPI, WhatsApp } from "./src";
+import { SetUpWhatsAppAPI } from "./src";
 import { WSResponseErrorCode } from "./src/error";
 import {
   BodyComponent,
@@ -6,13 +6,13 @@ import {
 } from "./src/templateMessages/components";
 import { TextParam } from "./src/templateMessages/params";
 
-SetUpWhatsAppAPI({
+const WhatsApp = SetUpWhatsAppAPI({
   businessPhoneNumberId: "<your business phone number id>",
   graphApiToken: "<your graph api token>",
 });
 
 (async () => {
-  const response = await WhatsApp().SendTemplateMessage({
+  const response = await WhatsApp.SendTemplateMessage({
     languageCode: "en_US",
     name: "verification_code",
     phoneNumber: "<your phone number... or someone else's>",
@@ -21,9 +21,9 @@ SetUpWhatsAppAPI({
   });
 
   response.match({
-    Ok(response) {
+    Ok(okResponse) {
       console.log("The message template was sent successfully");
-      console.log("Response:\n", JSON.stringify(response, undefined, 2));
+      console.log("Response:\n", JSON.stringify(okResponse, undefined, 2));
     },
     Err(error) {
       error.match({

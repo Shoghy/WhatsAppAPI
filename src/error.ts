@@ -21,11 +21,7 @@ export enum WSResponseErrorCode {
   /**
    * Any number between 200 and 299 (inclusive) is an `APIPermission` error
    */
-  APIPermission1 = 200,
-  /**
-   * Any number between 200 and 299 (inclusive) is an `APIPermission` error
-   */
-  APIPermission100 = 299,
+  APIPermission = 200,
   /**The app has reached its API call rate limit. */
   APITooManyCalls = 4,
   /**The WhatsApp Business Account has reached its rate limit. */
@@ -186,6 +182,7 @@ export class WSError extends Error {
     readonly code: WSResponseErrorCode,
     readonly fbtraceId: string,
     readonly details: string,
+    readonly originalCode: number,
     readonly errorSubCode?: number,
   ) {
     super(message, {
@@ -194,13 +191,18 @@ export class WSError extends Error {
   }
 
   static FromJSON(json: WSErrorJSON) {
+    let code = json.code;
+    if (code > 200 && code <= 299) {
+      code = WSResponseErrorCode.APIPermission;
+    }
     return new this(
       json,
       json.message,
       json.type,
-      json.code,
+      code,
       json.fbtrace_id,
       json.error_data.details,
+      json.code,
       json.error_subcode,
     );
   }
