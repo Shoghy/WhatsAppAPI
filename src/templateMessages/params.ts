@@ -75,8 +75,8 @@ export class DateTimeParam extends BaseParam {
 type MediaParamType = ParamType.Image | ParamType.Video | ParamType.Document;
 abstract class MediaParam extends BaseParam {
   caption?: string;
-  link!: string;
-  id!: string;
+  link?: string;
+  id?: string;
 
   protected constructor(type: MediaParamType, caption?: string) {
     super(type);
