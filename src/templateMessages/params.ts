@@ -130,14 +130,14 @@ export class DocumentParam extends MediaParam {
     }
   }
 
-  static FromId(id: string, props: DocumentParamProps = {}) {
+  static FromId(id: string, props: DocumentParamProps = {}): DocumentParam {
     const obj = new this(props);
     obj.id = id;
 
     return obj;
   }
 
-  static FromLink(link: string, props: DocumentParamProps = {}) {
+  static FromLink(link: string, props: DocumentParamProps = {}): DocumentParam {
     const obj = new this(props);
     obj.link = link;
 
@@ -156,14 +156,14 @@ export class DocumentParam extends MediaParam {
 }
 
 export class ImageParam extends MediaParam {
-  static FromId(id: string, caption?: string) {
+  static FromId(id: string, caption?: string): ImageParam {
     const obj = new this(ParamType.Image, caption);
     obj.id = id;
 
     return obj;
   }
 
-  static FromLink(link: string, caption?: string) {
+  static FromLink(link: string, caption?: string): ImageParam {
     const obj = new this(ParamType.Image, caption);
     obj.link = link;
 
@@ -185,14 +185,14 @@ export class TextParam extends BaseParam {
 }
 
 export class VideoParam extends MediaParam {
-  static FromId(id: string, caption?: string) {
+  static FromId(id: string, caption?: string): VideoParam {
     const obj = new this(ParamType.Video, caption);
     obj.id = id;
 
     return obj;
   }
 
-  static FromLink(link: string, caption?: string) {
+  static FromLink(link: string, caption?: string): VideoParam {
     const obj = new this(ParamType.Video, caption);
     obj.link = link;
 

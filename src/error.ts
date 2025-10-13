@@ -190,7 +190,7 @@ export class WSError extends Error {
     });
   }
 
-  static FromJSON(json: WSErrorJSON) {
+  static FromJSON(json: WSErrorJSON): WSError {
     let code = json.code;
     if (code > 200 && code <= 299) {
       code = WSResponseErrorCode.APIPermission;

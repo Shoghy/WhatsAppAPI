@@ -1,5 +1,8 @@
-import { catch_unwind } from "rusting-js";
+import { catchUnwindAsync } from "rusting-js";
+import type { Result } from "rusting-js/enums";
 
-export function SafeFetch(input: RequestInfo | URL, init?: RequestInit) {
-  return catch_unwind(() => fetch(input, init));
+export function SafeFetch(
+  ...params: Parameters<typeof fetch>
+): Promise<Result<Response, Error>> {
+  return catchUnwindAsync(() => fetch(...params));
 }

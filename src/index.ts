@@ -1,4 +1,4 @@
-import { catch_unwind } from "rusting-js";
+import { catchUnwindAsync } from "rusting-js";
 import { SafeFetch } from "./safeFetch";
 import type {
   SendTemplateMessageProps,
@@ -33,7 +33,9 @@ class WhatsAppApi {
     message,
     messageId,
     previewUrl = false,
-  }: SendTextMessageProps) {
+  }: SendTextMessageProps): Promise<
+    Result<TextMessageResponse, WSRequestError>
+  > {
     const { headers, baseUrl } = this;
 
     const body: TextMessageBody = {
@@ -68,7 +70,9 @@ class WhatsAppApi {
     headerComponent,
     bodyComponent,
     buttonComponents = [],
-  }: SendTemplateMessageProps) {
+  }: SendTemplateMessageProps): Promise<
+    Result<TextMessageResponse, WSRequestError>
+  > {
     const { headers, baseUrl } = this;
 
     const body: TemplateMessageBody = {
@@ -107,14 +111,14 @@ class WhatsAppApi {
   protected async HandleResponse(
     result: Result<Response, Error>,
   ): Promise<Result<TextMessageResponse, WSRequestError>> {
-    if (result.is_err()) {
-      return Err(WSRequestError.FetchError(result.unwrap_err()));
+    if (result.isErr()) {
+      return Err(WSRequestError.FetchError(result.unwrapErr()));
     }
 
     const response = result.unwrap();
-    const jsonResult = await catch_unwind(() => response.json());
-    if (jsonResult.is_err()) {
-      return Err(WSRequestError.ParseError(jsonResult.unwrap_err()));
+    const jsonResult = await catchUnwindAsync(() => response.json());
+    if (jsonResult.isErr()) {
+      return Err(WSRequestError.ParseError(jsonResult.unwrapErr()));
     }
 
     const responseJson: TextMessageResponse | WSErrorResponse =
@@ -132,6 +136,6 @@ class WhatsAppApi {
 export function SetUpWhatsAppAPI({
   graphApiToken,
   businessPhoneNumberId,
-}: SetUpProps) {
+}: SetUpProps): WhatsAppApi {
   return new WhatsAppApi(graphApiToken, businessPhoneNumberId);
 }
