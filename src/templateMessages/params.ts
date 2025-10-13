@@ -9,13 +9,22 @@ export enum ParamType {
   Video = "video",
 }
 
-export abstract class BaseParam {
-  constructor(public readonly type: ParamType) {}
+export abstract class Param {
+  constructor(
+    public type: ParamType,
+    public paramName?: string,
+  ) {}
 
   ToJSON(): object {
-    return {
+    const obj = {
       type: this.type,
-    };
+    } as Dict<string>;
+
+    if (this.paramName !== undefined) {
+      obj.paramName = this.paramName;
+    }
+
+    return obj;
   }
 }
 
@@ -26,15 +35,21 @@ export interface CurrencyParamProps {
   code: string;
   /**Amount multiplied by 1000. */
   amount1000: number;
+  paramName?: string;
 }
 
-export class CurrencyParam extends BaseParam implements CurrencyParamProps {
+export class CurrencyParam extends Param implements CurrencyParamProps {
   fallbackValue: string;
   code: string;
   amount1000: number;
 
-  constructor({ fallbackValue, code, amount1000 }: CurrencyParamProps) {
-    super(ParamType.Currency);
+  constructor({
+    fallbackValue,
+    code,
+    amount1000,
+    paramName,
+  }: CurrencyParamProps) {
+    super(ParamType.Currency, paramName);
 
     this.fallbackValue = fallbackValue;
     this.code = code;
@@ -43,7 +58,7 @@ export class CurrencyParam extends BaseParam implements CurrencyParamProps {
 
   override ToJSON(): object {
     return {
-      type: this.type,
+      ...super.ToJSON(),
       currency: {
         fallback_value: this.fallbackValue,
         code: this.code,
@@ -53,18 +68,21 @@ export class CurrencyParam extends BaseParam implements CurrencyParamProps {
   }
 }
 
-export class DateTimeParam extends BaseParam {
+export class DateTimeParam extends Param {
   /**
    * @param fallbackValue Default text. For Cloud API, we always use the fallback value,
    * and we do not attempt to localize using other optional fields.
    */
-  constructor(public fallbackValue: string) {
-    super(ParamType.DateTime);
+  constructor(
+    public fallbackValue: string,
+    paramName?: string,
+  ) {
+    super(ParamType.DateTime, paramName);
   }
 
   override ToJSON(): object {
     return {
-      type: this.type,
+      ...super.ToJSON(),
       date_time: {
         fallback_value: this.fallbackValue,
       },
@@ -73,13 +91,22 @@ export class DateTimeParam extends BaseParam {
 }
 
 type MediaParamType = ParamType.Image | ParamType.Video | ParamType.Document;
-abstract class MediaParam extends BaseParam {
+
+export interface MediaParamProps {
+  type: MediaParamType;
+  caption?: string;
+  paramName?: string;
+}
+
+export type IMediaParam = Omit<MediaParamProps, "type">;
+
+abstract class MediaParam extends Param {
   caption?: string;
   link?: string;
   id?: string;
 
-  protected constructor(type: MediaParamType, caption?: string) {
-    super(type);
+  protected constructor({ type, caption, paramName }: MediaParamProps) {
+    super(type, paramName);
 
     if (caption !== undefined) {
       this.caption = caption;
@@ -107,14 +134,13 @@ abstract class MediaParam extends BaseParam {
     }
 
     return {
+      ...super.ToJSON(),
       ...obj,
-      type: this.type,
     };
   }
 }
 
-export interface DocumentParamProps {
-  caption?: string;
+export interface DocumentParamProps extends IMediaParam {
   /**The extension of the filename will specify what format the document is displayed as in WhatsApp. */
   filename?: string;
 }
@@ -122,8 +148,8 @@ export interface DocumentParamProps {
 export class DocumentParam extends MediaParam {
   filename?: string;
 
-  private constructor({ caption, filename }: DocumentParamProps) {
-    super(ParamType.Document, caption);
+  protected constructor({ filename, ...mediaProps }: DocumentParamProps) {
+    super({ ...mediaProps, type: ParamType.Document });
 
     if (filename !== undefined) {
       this.filename = filename;
@@ -156,22 +182,22 @@ export class DocumentParam extends MediaParam {
 }
 
 export class ImageParam extends MediaParam {
-  static FromId(id: string, caption?: string): ImageParam {
-    const obj = new this(ParamType.Image, caption);
+  static FromId(id: string, props: IMediaParam = {}): ImageParam {
+    const obj = new this({ ...props, type: ParamType.Image });
     obj.id = id;
 
     return obj;
   }
 
-  static FromLink(link: string, caption?: string): ImageParam {
-    const obj = new this(ParamType.Image, caption);
+  static FromLink(link: string, props: IMediaParam = {}): ImageParam {
+    const obj = new this({ ...props, type: ParamType.Image });
     obj.link = link;
 
     return obj;
   }
 }
 
-export class TextParam extends BaseParam {
+export class TextParam extends Param {
   constructor(public text: string) {
     super(ParamType.Text);
   }
@@ -185,15 +211,15 @@ export class TextParam extends BaseParam {
 }
 
 export class VideoParam extends MediaParam {
-  static FromId(id: string, caption?: string): VideoParam {
-    const obj = new this(ParamType.Video, caption);
+  static FromId(id: string, props: IMediaParam = {}): VideoParam {
+    const obj = new this({ ...props, type: ParamType.Video });
     obj.id = id;
 
     return obj;
   }
 
-  static FromLink(link: string, caption?: string): VideoParam {
-    const obj = new this(ParamType.Video, caption);
+  static FromLink(link: string, props: IMediaParam = {}): VideoParam {
+    const obj = new this({ ...props, type: ParamType.Video });
     obj.link = link;
 
     return obj;
@@ -205,7 +231,7 @@ export enum ButtonParamType {
   Text = "text",
 }
 
-export abstract class BaseButtonParam {
+export abstract class ButtonParam {
   constructor(public readonly type: ButtonParamType) {}
 
   ToJSON(): object {
@@ -215,7 +241,7 @@ export abstract class BaseButtonParam {
   }
 }
 
-export class ButtonPayloadParam extends BaseButtonParam {
+export class ButtonPayloadParam extends ButtonParam {
   constructor(public payload: string) {
     super(ButtonParamType.Payload);
   }
@@ -228,7 +254,7 @@ export class ButtonPayloadParam extends BaseButtonParam {
   }
 }
 
-export class ButtonTextParam extends BaseButtonParam {
+export class ButtonTextParam extends ButtonParam {
   constructor(public text: string) {
     super(ButtonParamType.Payload);
   }

@@ -1,5 +1,5 @@
 import { ButtonParamType } from "./params";
-import type { BaseButtonParam, BaseParam } from "./params";
+import type { ButtonParam, Param } from "./params";
 
 export enum ComponentType {
   Body = "body",
@@ -19,7 +19,7 @@ type ParamBaseComponentType = ComponentType.Body | ComponentType.Header;
 abstract class ParamBaseComponent extends Component {
   constructor(
     type: ParamBaseComponentType,
-    public parameters: Array<BaseParam>,
+    public parameters: Array<Param>,
   ) {
     super(type);
   }
@@ -44,13 +44,13 @@ abstract class ParamBaseComponent extends Component {
 }
 
 export class BodyComponent extends ParamBaseComponent {
-  constructor(parameters: Array<BaseParam>) {
+  constructor(parameters: Array<Param>) {
     super(ComponentType.Body, parameters);
   }
 }
 
 export class HeaderComponent extends ParamBaseComponent {
-  constructor(parameters: Array<BaseParam>) {
+  constructor(parameters: Array<Param>) {
     super(ComponentType.Header, parameters);
   }
 }
@@ -142,7 +142,7 @@ export class UrlButtonComponent extends BaseButtonComponent {
 
 export class CatalogButtonComponent extends BaseButtonComponent {
   constructor(
-    public param: BaseButtonParam,
+    public param: ButtonParam,
     index: number,
   ) {
     super(ButtonComponentType.Catalog, index);
