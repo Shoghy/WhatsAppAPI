@@ -43,6 +43,14 @@ export default [
         },
       ],
       "@typescript-eslint/no-shadow": "warn",
+      "@typescript-eslint/explicit-function-return-type": [
+        "error",
+        {
+          allowExpressions: true,
+          allowTypedFunctionExpressions: true,
+          allowIIFEs: true,
+        },
+      ],
     },
   },
 ];
