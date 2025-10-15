@@ -1,5 +1,4 @@
-import { catchUnwindAsync } from "rusting-js";
-import { SafeFetch } from "./safeFetch";
+import { catchUnwindAsync, safeFetch } from "rusting-js";
 import type {
   SendTemplateMessageProps,
   SendTextMessageProps,
@@ -51,7 +50,7 @@ class WhatsAppApi {
       body.text.preview_url = true;
     }
 
-    const result = await SafeFetch(`${baseUrl}/messages`, {
+    const result = await safeFetch(`${baseUrl}/messages`, {
       method: "POST",
       headers,
       body: JSON.stringify(body),
@@ -99,7 +98,7 @@ class WhatsAppApi {
       body.template.components = components;
     }
 
-    const result = await SafeFetch(`${baseUrl}/messages`, {
+    const result = await safeFetch(`${baseUrl}/messages`, {
       method: "POST",
       headers,
       body: JSON.stringify(body),
