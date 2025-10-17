@@ -16,7 +16,7 @@ abstract class Component {
 }
 
 type ParamBaseComponentType = ComponentType.Body | ComponentType.Header;
-abstract class ParamBaseComponent extends Component {
+abstract class ParamComponent extends Component {
   constructor(
     type: ParamBaseComponentType,
     public parameters: Array<Param>,
@@ -43,13 +43,13 @@ abstract class ParamBaseComponent extends Component {
   }
 }
 
-export class BodyComponent extends ParamBaseComponent {
+export class BodyComponent extends ParamComponent {
   constructor(parameters: Array<Param>) {
     super(ComponentType.Body, parameters);
   }
 }
 
-export class HeaderComponent extends ParamBaseComponent {
+export class HeaderComponent extends ParamComponent {
   constructor(parameters: Array<Param>) {
     super(ComponentType.Header, parameters);
   }
@@ -74,7 +74,7 @@ export enum ButtonComponentType {
   Catalog = "catalog",
 }
 
-export abstract class BaseButtonComponent extends Component {
+export abstract class ButtonComponent extends Component {
   /**
    * @param index Position index of the button. You can have up to 10 buttons using index values of 0 to 9.
    */
@@ -94,7 +94,7 @@ export abstract class BaseButtonComponent extends Component {
   }
 }
 
-export class QuickReplyButtonComponent extends BaseButtonComponent {
+export class QuickReplyButtonComponent extends ButtonComponent {
   constructor(
     public payload: string,
     index: number,
@@ -117,7 +117,7 @@ export class QuickReplyButtonComponent extends BaseButtonComponent {
   }
 }
 
-export class UrlButtonComponent extends BaseButtonComponent {
+export class UrlButtonComponent extends ButtonComponent {
   constructor(
     public text: string,
     index: number,
@@ -140,7 +140,7 @@ export class UrlButtonComponent extends BaseButtonComponent {
   }
 }
 
-export class CatalogButtonComponent extends BaseButtonComponent {
+export class CatalogButtonComponent extends ButtonComponent {
   constructor(
     public param: ButtonParam,
     index: number,

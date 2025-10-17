@@ -1,6 +1,6 @@
 import type { WSResponseErrorCode } from "./error";
 import type {
-  BaseButtonComponent,
+  ButtonComponent,
   BodyComponent,
   HeaderComponent,
 } from "./templateMessages/components";
@@ -76,7 +76,7 @@ export interface SendTemplateMessageProps {
   phoneNumber: string;
   headerComponent?: HeaderComponent;
   bodyComponent?: BodyComponent;
-  buttonComponents?: BaseButtonComponent[];
+  buttonComponents?: ButtonComponent[];
 }
 
 export interface TemplateMessageBody {
