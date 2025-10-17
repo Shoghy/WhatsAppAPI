@@ -16,12 +16,16 @@ class WhatsAppApi {
   private headers: HeadersInit;
   private baseUrl: string;
 
-  constructor(graphApiToken: string, businessPhoneNumberId: string) {
+  constructor(
+    graphApiToken: string,
+    businessPhoneNumberId: string,
+    apiVersion: string,
+  ) {
     this.headers = {
       Authorization: `Bearer ${graphApiToken}`,
       "Content-Type": "application/json",
     };
-    this.baseUrl = `https://graph.facebook.com/v22.0/${businessPhoneNumberId}`;
+    this.baseUrl = `https://graph.facebook.com/${apiVersion}/${businessPhoneNumberId}`;
   }
 
   /**
@@ -135,6 +139,7 @@ class WhatsAppApi {
 export function SetUpWhatsAppAPI({
   graphApiToken,
   businessPhoneNumberId,
+  apiVersion = "v22.0",
 }: SetUpProps): WhatsAppApi {
-  return new WhatsAppApi(graphApiToken, businessPhoneNumberId);
+  return new WhatsAppApi(graphApiToken, businessPhoneNumberId, apiVersion);
 }

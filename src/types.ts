@@ -8,6 +8,7 @@ import type {
 export interface SetUpProps {
   businessPhoneNumberId: string;
   graphApiToken: string;
+  apiVersion?: string;
 }
 
 export interface TextMessageBody {
