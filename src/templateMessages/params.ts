@@ -198,13 +198,16 @@ export class ImageParam extends MediaParam {
 }
 
 export class TextParam extends Param {
-  constructor(public text: string) {
-    super(ParamType.Text);
+  constructor(
+    public text: string,
+    paramName?: string,
+  ) {
+    super(ParamType.Text, paramName);
   }
 
   override ToJSON(): object {
     return {
-      type: this.type,
+      ...super.ToJSON(),
       text: this.text,
     };
   }
