@@ -1,5 +1,7 @@
 import { catchUnwindAsync, safeFetch } from "rusting-js";
 import type {
+  SendStickerBody,
+  SendStickerProps,
   SendTemplateMessageProps,
   SendTextMessageProps,
   SetUpProps,
@@ -101,6 +103,38 @@ class WhatsAppApi {
     if (components.length > 0) {
       body.template.components = components;
     }
+
+    const result = await safeFetch(`${baseUrl}/messages`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(body),
+    });
+
+    return await this.HandleResponse(result);
+  }
+
+  /**
+   * @link https://developers.facebook.com/docs/whatsapp/cloud-api/messages/sticker-messages
+   */
+  async SendSticker(
+    props: SendStickerProps,
+  ): Promise<Result<TextMessageResponse, WSRequestError>> {
+    let sticker: SendStickerBody["sticker"];
+    if ("stickerId" in props) {
+      sticker = { id: props.stickerId };
+    } else {
+      sticker = { link: props.stickerUrl };
+    }
+
+    const body: SendStickerBody = {
+      messaging_product: "whatsapp",
+      recipient_type: "individual",
+      type: "sticker",
+      to: props.phoneNumber,
+      sticker,
+    };
+
+    const { headers, baseUrl } = this;
 
     const result = await safeFetch(`${baseUrl}/messages`, {
       method: "POST",

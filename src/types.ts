@@ -91,3 +91,16 @@ export interface TemplateMessageBody {
     components?: object[];
   };
 }
+
+export type SendStickerProps = { phoneNumber: string } & (
+  | { stickerId: string }
+  | { stickerUrl: string }
+);
+
+export interface SendStickerBody {
+  type: "sticker";
+  messaging_product: "whatsapp";
+  recipient_type: "individual";
+  to: string;
+  sticker: { id: string } | { link: string };
+}
