@@ -1,4 +1,4 @@
-import { Enum } from "rusting-js/enums";
+import { Arm, Enum } from "rusting-js/enums";
 import type { WSErrorJSON } from "./types";
 
 /**
@@ -156,23 +156,11 @@ export enum WSResponseErrorCode {
   GenericUserError = 135000,
 }
 
-export class WSRequestError extends Enum<{
-  FetchError: Error;
-  ParseError: Error;
-  ResponseError: WSError;
-}>() {
-  static FetchError(error: Error): WSRequestError {
-    return this.create("FetchError", error);
-  }
-
-  static ParseError(error: Error): WSRequestError {
-    return this.create("ParseError", error);
-  }
-
-  static ResponseError(error: WSError): WSRequestError {
-    return this.create("ResponseError", error);
-  }
-}
+export class WSRequestError extends Enum({
+  FetchError: Arm<Error>(),
+  ParseError: Arm<Error>(),
+  ResponseError: Arm<WSError>(),
+}) {}
 
 export class WSError extends Error {
   protected constructor(

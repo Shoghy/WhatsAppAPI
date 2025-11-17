@@ -24,6 +24,6 @@
   },
   "type": "module",
   "dependencies": {
-    "rusting-js": "^0.1.10"
+    "rusting-js": "^0.1.13"
   }
 }
