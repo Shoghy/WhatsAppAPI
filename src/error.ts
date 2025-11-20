@@ -1,4 +1,4 @@
-import { Arm, Enum } from "rusting-js/enums";
+import { Arm, Class, Enum } from "rusting-js/enums";
 import type { WSErrorJSON } from "./types";
 
 /**
@@ -157,6 +157,7 @@ export enum WSResponseErrorCode {
 }
 
 export class WSRequestError extends Enum({
+  __classType__: Class<WSRequestError>(),
   FetchError: Arm<Error>(),
   ParseError: Arm<Error>(),
   ResponseError: Arm<WSError>(),
