@@ -21,7 +21,7 @@ export abstract class Param {
     } as Dict<string>;
 
     if (this.paramName !== undefined) {
-      obj.paramName = this.paramName;
+      obj.parameter_name = this.paramName;
     }
 
     return obj;

@@ -170,7 +170,7 @@ export class WSError extends Error {
     readonly type: string,
     readonly code: WSResponseErrorCode,
     readonly fbtraceId: string,
-    readonly details: string,
+    readonly details: string | undefined,
     readonly originalCode: number,
     readonly errorSubCode?: number,
   ) {
@@ -184,13 +184,14 @@ export class WSError extends Error {
     if (code > 200 && code <= 299) {
       code = WSResponseErrorCode.APIPermission;
     }
+
     return new this(
       json,
       json.message,
       json.type,
       code,
       json.fbtrace_id,
-      json.error_data.details,
+      json.error_data?.details,
       json.code,
       json.error_subcode,
     );

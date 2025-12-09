@@ -43,7 +43,7 @@ export interface WSErrorJSON {
   message: string;
   type: string;
   code: WSResponseErrorCode;
-  error_data: {
+  error_data?: {
     messaging_product: "whatsapp";
     details: string;
   };
